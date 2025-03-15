@@ -1,0 +1,22 @@
+{
+  "name": "back_end",
+  "version": "1.0.0",
+  "description": "Back end for out Mirror project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Intelligent-Mirror-IM/Back-end-Server-side-PI-.git"
+  },
+  "author": "Basil Ismail",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Intelligent-Mirror-IM/Back-end-Server-side-PI-/issues"
+  },
+  "homepage": "https://github.com/Intelligent-Mirror-IM/Back-end-Server-side-PI-#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
