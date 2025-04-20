@@ -1,24 +1,50 @@
-import User from '../models/schemas/userSchema.js';
+import AiLog from "../models/schemas/aiLogSchema.js";
+import User from "../models/schemas/userSchema.js";
 
-export const getChatbotResponse = async (req, res) => {
+const aiLogResponse = async (req, res) => {
+  const userId = req.user?.id || req.body.userId;
+  const { prompt, response, status, errorMessage } = req.body;
+
+  if (!userId) {
+    return res
+      .status(401)
+      .json({ message: "Authentication required. No user ID provided." });
+  }
+
+  if (!prompt || !response) {
+    return res
+      .status(400)
+      .json({ message: "Both prompt and response fields are required." });
+  }
+
   try {
-    // Logic to process chatbot request
-    const userInput = req.body.input;
-    // Here you would typically call a service or model to get a response based on userInput
-    const response = `You said: ${userInput}`; // Placeholder response
+    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid user ID format" });
+    }
 
-    res.status(200).json({ message: response });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const aiLog = new AiLog({
+      userId: user._id,
+      prompt,
+      response,
+      status: status || "success",
+      errorMessage,
+    });
+
+    await aiLog.save();
+    user.aiLogs.push(aiLog._id);
+    await user.save();
+
+    return res.status(201).json(aiLog);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while processing your request.' });
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 
-export const saveUserData = async (req, res) => {
-  try {
-    const userData = new User(req.body);
-    await userData.save();
-    res.status(201).json({ message: 'User data saved successfully.' });
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while saving user data.' });
-  }
-};
+export { aiLogResponse };

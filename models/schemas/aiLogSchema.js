@@ -1,12 +1,6 @@
 import mongoose from "mongoose";
 
 const aiLogSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    required: true,
-    unique: true,
-    default: () => new mongoose.Types.ObjectId().toString(),
-  },
   userId: {
     type: String,
     required: true,
