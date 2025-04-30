@@ -14,6 +14,7 @@ const MONGO_URI =
 connectDB();
 
 app.use(express.json());
+
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
 
