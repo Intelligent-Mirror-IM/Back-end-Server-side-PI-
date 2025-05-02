@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
+import passport from "passport";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -13,7 +15,13 @@ const MONGO_URI =
 
 connectDB();
 
+// Add CORS middleware for web browsers
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Initialize Passport
+app.use(passport.initialize());
 
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
