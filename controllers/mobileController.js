@@ -1,5 +1,5 @@
-import AiLog from "../models/schemas/aiLogSchema.js";
-import User from "../models/schemas/userSchema.js";
+import AiLog from "../models/aiLogSchema.js";
+import User from "../models/userSchema.js";
 import bcrypt from "bcryptjs";
 
 const signup = async (req, res) => {
@@ -47,7 +47,7 @@ const signup = async (req, res) => {
   }
 };
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -80,4 +80,6 @@ const signin = async (req, res) => {
   }
 };
 
-export { signup, signin };
+const googleOauth = async (req, res) => {};
+
+export { signup, login, googleOauth };

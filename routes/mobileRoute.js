@@ -1,6 +1,6 @@
 import express from "express";
 import { signup } from "../controllers/mobileController.js";
-import { signin } from "../controllers/mobileController.js";
+import { login } from "../controllers/mobileController.js";
 
 const router = express.Router();
 
@@ -9,6 +9,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/signup", signup);
-router.post("/login", signin);
+router.post("/login", login);
 
 export default router;

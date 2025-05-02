@@ -1,5 +1,5 @@
-import AiLog from "../models/schemas/aiLogSchema.js";
-import User from "../models/schemas/userSchema.js";
+import AiLog from "../models/aiLogSchema.js";
+import User from "../models/userSchema.js";
 
 const aiLogResponse = async (req, res) => {
   const userId = req.user?.id || req.body.userId;

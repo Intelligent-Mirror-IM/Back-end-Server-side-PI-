@@ -5,8 +5,8 @@ import connectDB from "./config/db.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
 
-const app = express();
 dotenv.config();
+const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://localhost:27017/mydatabase";
