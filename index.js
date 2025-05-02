@@ -15,12 +15,9 @@ const MONGO_URI =
 
 connectDB();
 
-// Add CORS middleware for web browsers
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Initialize Passport
 app.use(passport.initialize());
 
 app.use("/api/maia", chatbotRoutes);

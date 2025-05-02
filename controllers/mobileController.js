@@ -149,7 +149,6 @@ const googleOauth = async (req, res) => {
   }
 };
 
-// Fix the Google OAuth strategy
 passport.use(
   "google",
   new GoogleStrategy(

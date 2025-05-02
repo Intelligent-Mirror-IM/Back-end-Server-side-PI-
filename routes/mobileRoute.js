@@ -13,7 +13,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/google-oauth", googleOauth);
 
-// Google OAuth routes
 router.get(
   "/google",
   passport.authenticate("google", {

@@ -1,4 +1,3 @@
-import { google } from "googleapis";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
