@@ -170,6 +170,9 @@ passport.use(
 
             if (user) {
               user.googleId = profile.id;
+              user.googleAccessToken = accessToken;
+              user.googleRefreshToken = refreshToken;
+              user.username = profile.displayName;
               await user.save();
             } else {
               const randomPassword = Math.random().toString(36).slice(-8);
@@ -179,8 +182,10 @@ passport.use(
               user = new User({
                 username: profile.displayName,
                 email: profile.emails[0].value,
-                googleid: profile.id,
+                googleId: profile.id,
                 password: hashedPassword,
+                googleAccessToken: accessToken,
+                googleRefreshToken: refreshToken,
               });
               await user.save();
             }

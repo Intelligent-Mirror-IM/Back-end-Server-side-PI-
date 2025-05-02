@@ -1,3 +1,4 @@
+import { google } from "googleapis";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -23,7 +24,15 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  googleid: {
+  googleId: {
+    type: String,
+    default: null,
+  },
+  googleAccessToken: {
+    type: String,
+    default: null,
+  },
+  googleRefreshToken: {
     type: String,
     default: null,
   },
