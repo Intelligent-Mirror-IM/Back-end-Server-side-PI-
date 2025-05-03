@@ -7,6 +7,7 @@ import GoogleStrategy from "passport-google-oauth20";
 import passport from "passport";
 import dotenv from "dotenv";
 dotenv.config();
+
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -37,11 +38,18 @@ const signup = async (req, res) => {
     });
     await newUser.save();
 
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+
+    newUser.token = token;
+    await newUser.save();
     const userResponse = {
       _id: newUser._id,
       username: newUser.username,
       email: newUser.email,
       createdAt: newUser.createdAt,
+      token: token,
     };
 
     return res.status(201).json(userResponse);
@@ -70,11 +78,18 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Password" });
     }
 
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+    user.token = token;
+    await user.save();
+
     const userResponse = {
       _id: user._id,
       username: user.username,
       email: user.email,
       createdAt: user.createdAt,
+      token: user.token,
     };
 
     return res.status(200).json(userResponse);

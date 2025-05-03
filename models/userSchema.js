@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
       ref: "AiLog",
     },
   ],
+  token: {
+    type: String,
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", userSchema);

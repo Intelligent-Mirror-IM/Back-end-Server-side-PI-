@@ -2,6 +2,7 @@ import express from "express";
 import { googleOauth, signup, login } from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import { jwtVerify } from "../utils/helpers.js";
 
 const router = express.Router();
 
@@ -12,7 +13,9 @@ router.get("/", (req, res) => {
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/google-oauth", googleOauth);
-
+router.get("/hey", jwtVerify, (req, res) => {
+  res.status(200).json({ message: "Hey, you are authenticated!" });
+});
 router.get(
   "/google",
   passport.authenticate("google", {

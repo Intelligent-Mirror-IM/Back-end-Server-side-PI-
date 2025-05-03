@@ -6,6 +6,7 @@ import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
 import passport from "passport";
 import cors from "cors";
+import { jwtVerify } from "./utils/helpers.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
+// app.use(jwtVerify);
 
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
