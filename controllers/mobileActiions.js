@@ -33,4 +33,15 @@ const retriveAiLogs = async (req, res) => {
   }
 };
 
-export { retriveAiLogs };
+const askMaia = async (req, res) => {
+  const { prompt } = req.body;
+  if (!currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  if (req.user.id != currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "Not The Same User" });
+  }
+  // TODO : Implement the logic to handle the prompt and redirect it to the AI model
+};
+
+export { retriveAiLogs, askMaia };
