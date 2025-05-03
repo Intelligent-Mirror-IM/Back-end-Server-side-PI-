@@ -104,7 +104,6 @@ const login = async (req, res) => {
 
 const googleOauth = async (req, res) => {
   const idToken = req.body?.id_token || req.body?.idToken;
-  console.log("Request Body: ", req.body);
   if (!idToken)
     return res.status(400).json({ message: "Google ID token is required" });
 
