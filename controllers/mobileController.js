@@ -6,6 +6,7 @@ import { OAuth2Client } from "google-auth-library";
 import GoogleStrategy from "passport-google-oauth20";
 import passport from "passport";
 import dotenv from "dotenv";
+import { currentActiveUser } from "../utils/currentActiveUser.js";
 dotenv.config();
 
 const signup = async (req, res) => {
@@ -52,6 +53,7 @@ const signup = async (req, res) => {
       token: token,
     };
 
+    currentActiveUser.setCurrentUser("" + newUser._id);
     return res.status(201).json(userResponse);
   } catch (error) {
     return res
@@ -91,7 +93,7 @@ const login = async (req, res) => {
       createdAt: user.createdAt,
       token: user.token,
     };
-
+    currentActiveUser.setCurrentUser("" + user._id);
     return res.status(200).json(userResponse);
   } catch (error) {
     return res

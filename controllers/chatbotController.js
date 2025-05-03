@@ -1,14 +1,16 @@
 import AiLog from "../models/aiLogSchema.js";
 import User from "../models/userSchema.js";
+import { currentActiveUser } from "../utils/currentActiveUser.js";
 
 const aiLogResponse = async (req, res) => {
-  const userId = req.user?.id || req.body.userId;
   const { prompt, response, status, errorMessage } = req.body;
 
+  if (!currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  const userId = currentActiveUser.getCurrentUser();
   if (!userId) {
-    return res
-      .status(401)
-      .json({ message: "Authentication required. No user ID provided." });
+    return res.status(401).json({ message: "No active User." });
   }
 
   if (!prompt || !response) {
