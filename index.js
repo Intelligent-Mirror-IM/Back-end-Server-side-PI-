@@ -7,16 +7,51 @@ import mobileRoutes from "./routes/mobileRoute.js";
 import passport from "passport";
 import cors from "cors";
 import { google } from "googleapis";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+const httpServer = http.createServer(app);
 
 connectDB();
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  },
+  transports: ["websocket", "polling"],
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  socket.on("message", (message) => {
+    console.log("Received message:", message);
+    socket.emit("messageResponse", {
+      received: true,
+      message: "Server received your message",
+    });
+  });
+  socket.volatile.emit("Response", "LOL");
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(passport.initialize());
 // app.use(jwtVerify);
 
@@ -31,6 +66,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
