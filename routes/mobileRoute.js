@@ -13,9 +13,9 @@ router.get("/", (req, res) => {
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/google-oauth", googleOauth);
-router.post("/askMaia", jwtVerify, askMaia);
+router.post("/ask-maia", jwtVerify, askMaia);
 
-router.get("/getLogs", jwtVerify, retriveAiLogs);
+router.get("/get-logs", jwtVerify, retriveAiLogs);
 router.get(
   "/google",
   passport.authenticate("google", {

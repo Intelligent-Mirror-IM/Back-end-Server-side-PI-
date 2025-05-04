@@ -6,7 +6,7 @@ import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
 import passport from "passport";
 import cors from "cors";
-import { jwtVerify } from "./utils/helpers.js";
+import { google } from "googleapis";
 
 dotenv.config();
 const app = express();
@@ -22,7 +22,7 @@ app.use(passport.initialize());
 
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
-
+// app.use("/api/google", googleRoutes);
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.statusCode || 500).json({
