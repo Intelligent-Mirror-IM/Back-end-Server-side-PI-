@@ -12,11 +12,12 @@ const aiLogSchema = new mongoose.Schema({
   },
   response: {
     type: String,
+    default: "NO RESPONSE",
     required: true,
   },
   status: {
     type: String,
-    enum: ["success", "error"],
+    enum: ["success", "error", "processing"],
     default: "success",
   },
   errorMessage: {

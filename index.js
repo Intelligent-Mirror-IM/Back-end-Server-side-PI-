@@ -9,12 +9,13 @@ import cors from "cors";
 import { google } from "googleapis";
 import { Server } from "socket.io";
 import http from "http";
+import { handleAiResponse } from "./controllers/mobileActiions.js";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const httpServer = http.createServer(app);
-
+export const connectedSockets = new Map();
 connectDB();
 
 const io = new Server(httpServer, {
@@ -29,6 +30,7 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("New client connected");
+  connectedSockets.set(socket.id, socket);
   socket.on("message", (message) => {
     console.log("Received message:", message);
     socket.emit("messageResponse", {
@@ -36,7 +38,11 @@ io.on("connection", (socket) => {
       message: "Server received your message",
     });
   });
-  socket.volatile.emit("Response", "LOL");
+
+  socket.on("aiResponse", (data) => {
+    handleAiResponse(socket, data);
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
@@ -66,6 +72,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
+  for (const [socketId, socket] of connectedSockets.entries()) {
+    socket.emit("messageResponse", "LOL");
+  }
+});
 httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
