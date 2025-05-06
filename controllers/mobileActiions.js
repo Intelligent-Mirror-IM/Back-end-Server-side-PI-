@@ -88,6 +88,9 @@ const askMaia = async (req, res) => {
       });
     });
     const socket = Array.from(sockets.values())[0];
+    if (!socket || !socket.connected) {
+      throw new Error("Socket connection is not available");
+    }
     socket.emit("processAiRequest", {
       requestId,
       prompt,
