@@ -105,7 +105,7 @@ const askMaia = async (req, res) => {
     user.aiLogs.push(aiLog._id);
     await user.save();
 
-    return res.status(200).json({ response: aiResponse.response });
+    return res.status(200).json({ response: aiResponse });
   } catch (error) {
     return res
       .status(500)
