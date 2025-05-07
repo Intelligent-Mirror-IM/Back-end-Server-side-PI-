@@ -62,6 +62,7 @@ const askMaia = async (req, res) => {
     if (sockets.size === 0) {
       aiLog.status = "error";
       aiLog.errorMessage = "No active socket connection";
+      await aiLog.save();
       return res.status(503).json({ message: "No active socket connection" });
     }
     const responsePromise = new Promise((resolve, reject) => {
@@ -104,10 +105,7 @@ const askMaia = async (req, res) => {
     user.aiLogs.push(aiLog._id);
     await user.save();
 
-    console.log("Last Log", aiLog);
-    return res
-      .status(200)
-      .json({ message: "Request sent to AI model", aiResponse });
+    return res.status(200).json({ response: aiResponse.response });
   } catch (error) {
     return res
       .status(500)

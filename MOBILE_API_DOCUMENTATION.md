@@ -173,7 +173,7 @@ Handles the callback from Google after successful authentication.
 
 **POST /ask-maia**
 
-Sends a prompt to Maia AI via Socket.io and returns the generated response.
+Sends a prompt to Maia AI and returns the generated response.
 
 - **Authentication Required**: Yes
 - **Request Body**:
@@ -194,11 +194,7 @@ Sends a prompt to Maia AI via Socket.io and returns the generated response.
   - Body:
     ```json
     {
-      "message": "Request sent to AI model",
-      "aiResponse": {
-        "response": "The meaning of life is a philosophical question...",
-        "otherMetadata": "additional information if provided by AI"
-      }
+      "response": "The meaning of life is a philosophical question..."
     }
     ```
 - **Error Responses**:
