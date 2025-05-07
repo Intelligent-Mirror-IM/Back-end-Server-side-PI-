@@ -108,7 +108,7 @@ The application implements a three-way real-time communication system between:
 
 The innovative bridge between HTTP and WebSockets works as follows:
 
-1. Mobile client sends HTTP request to `/api/mobile/askMaia` endpoint
+1. Mobile client sends HTTP request to `/api/mobile/ask-maia` endpoint
 2. Server creates a unique requestId and Promise for the asynchronous response
 3. Server emits a `processAiRequest` event to connected Socket.io clients (AI services)
 4. Server stores the Promise resolvers in a pendingRequests Map
