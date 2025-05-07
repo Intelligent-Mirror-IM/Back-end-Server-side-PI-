@@ -6,7 +6,6 @@ import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
 import passport from "passport";
 import cors from "cors";
-import { google } from "googleapis";
 import { Server } from "socket.io";
 import http from "http";
 import { handleAiResponse } from "./controllers/mobileActiions.js";
@@ -60,11 +59,10 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(passport.initialize());
-// app.use(jwtVerify);
 
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
-// app.use("/api/google", googleRoutes);
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.statusCode || 500).json({

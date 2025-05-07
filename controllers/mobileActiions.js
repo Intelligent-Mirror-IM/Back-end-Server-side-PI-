@@ -47,7 +47,6 @@ const askMaia = async (req, res) => {
   if (req.user.id != currentActiveUser.getCurrentUser()) {
     return res.status(401).json({ message: "Not The Same User" });
   }
-  // TODO : Implement the logic to handle the prompt and redirect it to the AI model
   try {
     const userId = req.user.id;
     const requestId = `req_${Date.now()}_${Math.random()
