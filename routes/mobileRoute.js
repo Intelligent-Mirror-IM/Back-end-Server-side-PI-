@@ -1,5 +1,10 @@
 import express from "express";
-import { googleOauth, signup, login } from "../controllers/mobileController.js";
+import {
+  googleOauth,
+  signup,
+  login,
+  logout,
+} from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { jwtVerify } from "../utils/helpers.js";
@@ -12,7 +17,7 @@ router.get("/", (req, res) => {
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/google-oauth", googleOauth);
+router.post("/logout", jwtVerify, logout);
 router.post("/ask-maia", jwtVerify, askMaia);
 
 router.get("/get-logs", jwtVerify, retriveAiLogs);

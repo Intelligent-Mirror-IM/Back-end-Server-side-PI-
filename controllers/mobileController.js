@@ -101,7 +101,30 @@ const login = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
-
+const logout = async (req, res) => {
+  if (
+    !currentActiveUser.getCurrentUser() ||
+    req.user.id !== currentActiveUser.getCurrentUser()
+  ) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  const userId = currentActiveUser.getCurrentUser();
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  try {
+    user.token = null;
+    await user.save();
+    currentActiveUser.setCurrentUser(null);
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
 const googleOauth = async (req, res) => {
   const idToken = req.body?.id_token || req.body?.idToken;
   if (!idToken)
@@ -236,4 +259,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-export { signup, login, googleOauth };
+export { signup, login, googleOauth, logout };
