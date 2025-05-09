@@ -79,7 +79,6 @@ backend-nodejs
 - `GET /api/mobile`: Returns a simple message indicating the mobile API is working.
 - `POST /api/mobile/signup`: Creates a new user account with secure password hashing.
 - `POST /api/mobile/login`: Authenticates a user and returns a JWT token.
-- `POST /api/mobile/google-oauth`: Processes Google OAuth tokens from mobile clients.
 - `POST /api/mobile/ask-maia`: Sends a prompt to Maia AI via Socket.io and returns the generated response asynchronously (requires JWT authentication).
 - `GET /api/mobile/get-logs`: Retrieves all AI conversation logs for the authenticated user (requires JWT authentication).
 - `GET /api/mobile/google`: Initiates Google OAuth authentication flow.

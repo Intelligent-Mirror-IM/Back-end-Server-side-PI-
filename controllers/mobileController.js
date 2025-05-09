@@ -237,6 +237,8 @@ passport.use(
         });
 
         user.token = token;
+        await user.save();
+        currentActiveUser.setCurrentUser("" + user._id);
         return done(null, user);
       } catch (error) {
         console.error("Google Strategy error: ", error);
@@ -259,4 +261,36 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-export { signup, login, googleOauth, logout };
+const editProfile = async (req, res) => {
+  if (!currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  if (req.user.id != currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "Not The Same User" });
+  }
+  const { username, email } = req.body;
+  if (!username && !email) {
+    return res.status(400).json({ message: "No fields to update" });
+  }
+  const userId = currentActiveUser.getCurrentUser();
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (username) user.username = username;
+    if (email) user.email = email;
+
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export { signup, login, googleOauth, logout, editProfile };

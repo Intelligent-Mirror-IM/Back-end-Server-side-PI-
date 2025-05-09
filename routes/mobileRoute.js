@@ -4,6 +4,7 @@ import {
   signup,
   login,
   logout,
+  editProfile,
 } from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
@@ -20,6 +21,7 @@ router.post("/login", login);
 router.post("/logout", jwtVerify, logout);
 router.post("/ask-maia", jwtVerify, askMaia);
 
+router.patch("/edit-profile", jwtVerify, editProfile);
 router.get("/get-logs", jwtVerify, retriveAiLogs);
 router.get(
   "/google",
