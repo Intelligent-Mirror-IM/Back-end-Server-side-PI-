@@ -8,6 +8,7 @@ import {
   forgotPassword,
   checkOTP,
   resetPassword,
+  deleteAccount
 } from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
@@ -27,6 +28,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/check-otp", checkOTP);
 router.post("/reset-password", jwtVerify, resetPassword);
 router.patch("/edit-profile", jwtVerify, editProfile);
+router.delete("/delete-account", jwtVerify, deleteAccount);
 router.get("/get-logs", jwtVerify, retriveAiLogs);
 router.get(
   "/google",

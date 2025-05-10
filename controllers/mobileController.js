@@ -386,7 +386,28 @@ const editProfile = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
-
+const deleteAccount = async (req, res) => {
+  if (!currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  if (req.user.id != currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "Not The same User" });
+  }
+  try {
+    const userId = User.findOne({ _id: req.user.id });
+    if (!userId) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await User.deleteOne({ _id: req.user.id });
+    currentActiveUser.setCurrentUser(null);
+    return res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Error in delete account: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
 export {
   signup,
   login,
@@ -396,4 +417,5 @@ export {
   forgotPassword,
   checkOTP,
   resetPassword,
+  deleteAccount,
 };
