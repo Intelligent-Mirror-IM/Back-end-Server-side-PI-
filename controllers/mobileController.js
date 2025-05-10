@@ -7,6 +7,9 @@ import GoogleStrategy from "passport-google-oauth20";
 import passport from "passport";
 import dotenv from "dotenv";
 import { currentActiveUser } from "../utils/currentActiveUser.js";
+import { sendMail } from "../utils/mailHandler.js";
+import OTP from "../utils/OTPhandler.js";
+
 dotenv.config();
 
 const signup = async (req, res) => {
@@ -75,7 +78,7 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid Email" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -123,6 +126,94 @@ const logout = async (req, res) => {
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ message: "No user found with this email" });
+    OTP.generateOTP(email, 6);
+    sendMail(
+      email,
+      "FORGOT PASSSWORD",
+      `Your one time password is ${OTP.getOTP(email)}`
+    );
+    return res.status(200).json({
+      message: "OTP email is sent successfully",
+    });
+  } catch (error) {
+    console.error("Error in forgot password: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+const checkOTP = async (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return res.status(400).json({ message: "Email and OTP are required" });
+  }
+  if (!OTP.verifyOTP(email, otp)) {
+    return res.status(400).json({ message: "Invalid OTP" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "No user found with this email" });
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+    user.token = token;
+    await user.save();
+    currentActiveUser.setCurrentUser("" + user._id);
+    return res.status(200).json({
+      message: "OTP verified successfully",
+      token,
+    });
+  } catch (error) {
+    console.error("Error in OTP verification: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  if (!newPassword) {
+    return res.status(400).json({ message: "New password is required" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "No user found with this email" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    OTP.deleteOTP(email);
+    sendMail(
+      email,
+      "Password Reset Success!",
+      "Your password has been reset successfully"
+    );
+    return res.status(200).json({
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error("Error in reset password: ", error);
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
@@ -296,4 +387,13 @@ const editProfile = async (req, res) => {
   }
 };
 
-export { signup, login, googleOauth, logout, editProfile };
+export {
+  signup,
+  login,
+  googleOauth,
+  logout,
+  editProfile,
+  forgotPassword,
+  checkOTP,
+  resetPassword,
+};

@@ -22,10 +22,14 @@ backend-nodejs
 │   └── mobileRoute.js
 ├── utils
 │   ├── currentActiveUser.js
-│   └── helpers.js
+│   ├── helpers.js
+│   ├── mailHandler.js
+│   └── OTPhandler.js
 ├── index.js
 ├── .env
 ├── package.json
+├── MOBILE_API_DOCUMENTATION.md
+├── CHATBOT_API_DOCUMENTATION.md
 └── README.md
 ```
 
@@ -53,6 +57,10 @@ backend-nodejs
    JWT_SECRET=<your-jwt-secret>
    GOOGLE_CLIENT_ID=<your-google-client-id>
    GOOGLE_CLIENT_SECRET=<your-google-client-secret>
+   MAIL_HOST=<your-smtp-host>
+   MAIL_PORT=<your-smtp-port>
+   MAIL_USER=<your-email-address>
+   MAIL_PASS=<your-email-password-or-app-password>
    ```
 
 ## Usage
@@ -79,10 +87,17 @@ backend-nodejs
 - `GET /api/mobile`: Returns a simple message indicating the mobile API is working.
 - `POST /api/mobile/signup`: Creates a new user account with secure password hashing.
 - `POST /api/mobile/login`: Authenticates a user and returns a JWT token.
-- `POST /api/mobile/ask-maia`: Sends a prompt to Maia AI via Socket.io and returns the generated response asynchronously (requires JWT authentication).
-- `GET /api/mobile/get-logs`: Retrieves all AI conversation logs for the authenticated user (requires JWT authentication).
+- `POST /api/mobile/logout`: Logs out the current user (requires JWT authentication).
+- `POST /api/mobile/ask-maia`: Sends a prompt to Maia AI and returns the generated response (requires JWT authentication).
+- `POST /api/mobile/forgot-password`: Initiates password reset process by sending OTP via email.
+- `POST /api/mobile/check-otp`: Verifies the OTP sent to the user's email.
+- `POST /api/mobile/reset-password`: Resets the user's password using a valid JWT token.
+- `PATCH /api/mobile/edit-profile`: Updates the user's profile information (requires JWT authentication).
+- `GET /api/mobile/get-logs`: Retrieves the most recent AI conversation logs for the authenticated user (requires JWT authentication).
 - `GET /api/mobile/google`: Initiates Google OAuth authentication flow.
 - `GET /api/mobile/google/callback`: Handles Google OAuth callback and returns user data with JWT token.
+
+For detailed API documentation, refer to `MOBILE_API_DOCUMENTATION.md` and `CHATBOT_API_DOCUMENTATION.md`.
 
 ## Socket.io Integration
 
@@ -131,6 +146,11 @@ The Socket.io implementation includes robust error handling:
 - **Google Calendar API**: Integration with Google Calendar for managing events.
 - **User Session Tracking**: Global user tracking across the application using singleton pattern.
 - **AI Interaction Logging**: All AI interactions are logged and associated with user accounts.
+- **Email Services**: SMTP integration for sending transactional emails like password reset.
+- **OTP System**: One-Time Password generation and verification for secure password reset.
+- **User Profile Management**: Endpoints for updating user profile information.
+- **Password Reset Flow**: Complete forgot password, OTP verification, and reset password workflow.
+- **Simplified API Responses**: Streamlined JSON responses for better client integration.
 - **Input Validation**: Comprehensive input validation to prevent bad data.
 - **Error Handling**: Global error handling middleware for consistent error responses.
 - **Route-specific JWT Authentication**: JWT verification middleware applied to protected routes.
@@ -171,6 +191,7 @@ The WebSocket connections are managed through the same EC2 instance, allowing fo
 - passport: Authentication middleware
 - passport-google-oauth20: Google OAuth strategy
 - googleapis: Google API client library
+- nodemailer: Email sending functionality
 - dotenv: Environment variable management
 - http: HTTP server creation for Socket.io integration
 - nodemon (dev): Auto-reload during development

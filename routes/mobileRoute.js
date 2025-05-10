@@ -5,6 +5,9 @@ import {
   login,
   logout,
   editProfile,
+  forgotPassword,
+  checkOTP,
+  resetPassword,
 } from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
@@ -20,7 +23,9 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", jwtVerify, logout);
 router.post("/ask-maia", jwtVerify, askMaia);
-
+router.post("/forgot-password", forgotPassword);
+router.post("/check-otp", checkOTP);
+router.post("/reset-password", jwtVerify, resetPassword);
 router.patch("/edit-profile", jwtVerify, editProfile);
 router.get("/get-logs", jwtVerify, retriveAiLogs);
 router.get(
