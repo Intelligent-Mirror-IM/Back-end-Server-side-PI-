@@ -1,3 +1,4 @@
+import { connectedSockets } from "../index.js";
 import AiLog from "../models/aiLogSchema.js";
 import User from "../models/userSchema.js";
 import { currentActiveUser } from "../utils/currentActiveUser.js";
@@ -48,5 +49,13 @@ const aiLogResponse = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
-
-export { aiLogResponse };
+const checkActiveSession = async (req, res) => {
+  if (!connectedSockets.size) {
+    return res.status(401).json({ message: "No active session." });
+  }
+  return res.status(200).json({
+    message: "Active session found.",
+    activeSession: connectedSockets.size,
+  });
+};
+export { aiLogResponse, checkActiveSession };
