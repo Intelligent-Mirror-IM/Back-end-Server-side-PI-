@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.status(200).json({ message: "Chatbot API is working" });
 });
-router.get("/active-session", jwtVerify, checkActiveSession);
+router.get("/active-session", checkActiveSession);
 router.post("/message", aiLogResponse);
 
 export default router;
