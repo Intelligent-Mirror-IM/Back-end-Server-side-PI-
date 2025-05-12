@@ -377,9 +377,13 @@ const editProfile = async (req, res) => {
 
     await user.save();
 
+    const userResponse = {
+      email: user.email,
+      username: user.username,
+    };
     return res
       .status(200)
-      .json({ message: "Profile updated successfully", user });
+      .json({ message: "Profile updated successfully", userResponse });
   } catch (error) {
     return res
       .status(500)
