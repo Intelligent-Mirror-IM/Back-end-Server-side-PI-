@@ -262,6 +262,29 @@ Retrieves the most recent AI conversation logs for the authenticated user.
   - 404 Not Found: User not found
   - 500 Internal Server Error: Server-side error
 
+### Delete AI Logs
+
+**DELETE /delete-logs**
+
+Deletes all AI conversation logs for the authenticated user.
+
+- **Authentication Required**: Yes
+- **Request**: No body required
+- **Process**:
+  1. Verifies the user is authenticated
+  2. Deletes all AI logs associated with the user from the database
+- **Response**:
+  - Status Code: 200 OK
+  - Body:
+    ```json
+    {
+      "message": "Logs deleted successfully"
+    }
+    ```
+- **Error Responses**:
+  - 401 Unauthorized: No active user or authentication mismatch
+  - 500 Internal Server Error: Server-side error
+
 ### Forgot Password
 
 **POST /forgot-password**
