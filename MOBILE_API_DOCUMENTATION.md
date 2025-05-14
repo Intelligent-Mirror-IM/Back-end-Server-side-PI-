@@ -399,6 +399,31 @@ Updates the user's profile information.
   - 404 Not Found: User not found
   - 500 Internal Server Error: Server-side error
 
+### Delete Account
+
+**DELETE /delete-account**
+
+Permanently deletes the user's account and all associated data.
+
+- **Authentication Required**: Yes
+- **Request**: No body required
+- **Process**:
+  1. Verifies the user is authenticated
+  2. Deletes the user account from the database
+  3. Clears the active user session
+- **Response**:
+  - Status Code: 200 OK
+  - Body:
+    ```json
+    {
+      "message": "Account deleted successfully"
+    }
+    ```
+- **Error Responses**:
+  - 401 Unauthorized: No active user or authentication mismatch
+  - 404 Not Found: User not found
+  - 500 Internal Server Error: Server-side error
+
 ## Error Handling
 
 All endpoints follow a consistent error response format:

@@ -93,6 +93,7 @@ backend-nodejs
 - `POST /api/mobile/check-otp`: Verifies the OTP sent to the user's email.
 - `POST /api/mobile/reset-password`: Resets the user's password using a valid JWT token.
 - `PATCH /api/mobile/edit-profile`: Updates the user's profile information (requires JWT authentication).
+- `DELETE /api/mobile/delete-account`: Permanently deletes the user's account (requires JWT authentication).
 - `GET /api/mobile/get-logs`: Retrieves the most recent AI conversation logs for the authenticated user (requires JWT authentication).
 - `GET /api/mobile/google`: Initiates Google OAuth authentication flow.
 - `GET /api/mobile/google/callback`: Handles Google OAuth callback and returns user data with JWT token.
@@ -149,6 +150,7 @@ The Socket.io implementation includes robust error handling:
 - **Email Services**: SMTP integration for sending transactional emails like password reset.
 - **OTP System**: One-Time Password generation and verification for secure password reset.
 - **User Profile Management**: Endpoints for updating user profile information.
+- **Account Management**: Complete user lifecycle including sign-up, profile editing, and account deletion.
 - **Password Reset Flow**: Complete forgot password, OTP verification, and reset password workflow.
 - **Simplified API Responses**: Streamlined JSON responses for better client integration.
 - **Input Validation**: Comprehensive input validation to prevent bad data.
