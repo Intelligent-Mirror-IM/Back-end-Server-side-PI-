@@ -27,7 +27,7 @@ const retriveAiLogs = async (req, res) => {
   try {
     const aiLogs = await AiLog.find({ userId: user._id })
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(15);
     return res.status(200).json(aiLogs);
   } catch (error) {
     return res
@@ -130,4 +130,24 @@ const handleAiResponse = async (socket, data) => {
     console.error("Request ID not found:", requestId);
   }
 };
-export { retriveAiLogs, askMaia, handleAiResponse };
+
+const deleteLogs = async (req, res) => {
+  if (!currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "No active User." });
+  }
+  if (req.user.id != currentActiveUser.getCurrentUser()) {
+    return res.status(401).json({ message: "Not The Same User" });
+  }
+  const userId = currentActiveUser.getCurrentUser();
+  try {
+    await AiLog.deleteMany({ userId });
+    return res.status(200).json({ message: "Logs deleted successfully" });
+  } catch (error) {
+    console.error("Error in delete logs: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export { retriveAiLogs, askMaia, handleAiResponse, deleteLogs };

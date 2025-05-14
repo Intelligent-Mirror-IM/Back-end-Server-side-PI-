@@ -8,12 +8,16 @@ import {
   forgotPassword,
   checkOTP,
   resetPassword,
-  deleteAccount
+  deleteAccount,
 } from "../controllers/mobileController.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { jwtVerify } from "../utils/helpers.js";
-import { retriveAiLogs, askMaia } from "../controllers/mobileActiions.js";
+import {
+  retriveAiLogs,
+  askMaia,
+  deleteLogs,
+} from "../controllers/mobileActiions.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -29,6 +33,7 @@ router.post("/check-otp", checkOTP);
 router.post("/reset-password", jwtVerify, resetPassword);
 router.patch("/edit-profile", jwtVerify, editProfile);
 router.delete("/delete-account", jwtVerify, deleteAccount);
+router.delete("/delete-logs", jwtVerify, deleteLogs);
 router.get("/get-logs", jwtVerify, retriveAiLogs);
 router.get(
   "/google",
