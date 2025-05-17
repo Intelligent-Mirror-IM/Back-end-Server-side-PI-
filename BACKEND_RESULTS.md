@@ -52,25 +52,27 @@ Effective MongoDB schema design supports:
 
 ## Performance Metrics
 
-| Metric | Result |
-|--------|--------|
-| Average API Response Time | <100ms (non-AI endpoints) |
-| AI Request Processing | ~1-2s |
-| Concurrent User Capacity | 500+ |
-| Database Query Performance | <50ms average |
-| Authentication Process | <200ms |
+| Metric                     | Result                    |
+| -------------------------- | ------------------------- |
+| Average API Response Time  | <100ms (non-AI endpoints) |
+| AI Request Processing      | ~1-2s                     |
+| Concurrent User Capacity   | 500+                      |
+| Database Query Performance | <50ms average             |
+| Authentication Process     | <200ms                    |
 
 ## Usage Scenarios
 
 ### Scenario 1: Mobile User Registration and AI Interaction
 
 1. **User Registration:**
+
    - A new user downloads the mobile application
    - They register using email/password through the `/signup` endpoint
    - The system validates input, creates a user account, and returns a JWT token
    - The user is now authenticated in the application
 
 2. **AI Interaction:**
+
    - The authenticated user enters a question in the app's chat interface
    - The app sends the question to the `/ask-maia` endpoint
    - The backend validates the request and forwards it to the AI service via Socket.io
@@ -86,12 +88,14 @@ Effective MongoDB schema design supports:
 ### Scenario 2: Password Recovery
 
 1. **Initiating Recovery:**
+
    - A user forgets their password and initiates recovery
    - They enter their email address in the recovery form
    - The application calls the `/forgot-password` endpoint
    - The system generates a 6-digit OTP and sends it to the user's email
 
 2. **OTP Verification:**
+
    - The user receives the email with the OTP
    - They enter the OTP in the application
    - The application verifies the OTP via the `/check-otp` endpoint
@@ -106,11 +110,13 @@ Effective MongoDB schema design supports:
 ### Scenario 3: Google OAuth Authentication
 
 1. **OAuth Initiation:**
+
    - A user chooses to log in with Google
    - The mobile app initiates the Google authentication process
    - The app obtains an ID token from Google
 
 2. **Backend Verification:**
+
    - The app sends the ID token to the `/google-oauth` endpoint
    - The backend verifies the token with Google's authentication servers
    - The system checks if a user with the same email already exists
@@ -125,10 +131,12 @@ Effective MongoDB schema design supports:
 ### Scenario 4: Profile Management
 
 1. **Viewing Profile:**
+
    - An authenticated user checks their profile information
    - The information is displayed based on their stored user data
 
 2. **Updating Profile:**
+
    - The user decides to update their username
    - They enter the new username in the profile form
    - The app sends the update to the `/edit-profile` endpoint
@@ -144,11 +152,13 @@ Effective MongoDB schema design supports:
 ### Scenario 5: Chatbot Integration
 
 1. **Website Embed:**
+
    - A business integrates the chatbot widget on their website
    - A website visitor clicks on the chat icon
    - The chatbot interface loads and initiates a session
 
 2. **AI Interaction:**
+
    - The visitor types a question about the business
    - The chatbot sends the question to the backend
    - The backend processes the request via the AI service
@@ -164,10 +174,12 @@ Effective MongoDB schema design supports:
 While the current implementation successfully meets the core requirements, some limitations have been identified:
 
 1. **Scalability Considerations:**
+
    - The current Socket.io implementation may need optimization for very high concurrent loads
    - Database sharding strategy should be implemented for production scaling
 
 2. **Feature Enhancements:**
+
    - Implementation of advanced analytics for AI conversations
    - Support for multimedia content in conversations
    - Integration with additional authentication providers

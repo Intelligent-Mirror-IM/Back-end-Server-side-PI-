@@ -360,7 +360,8 @@ Resets the user's password using a valid JWT token.
 - **Request Body**:
   ```json
   {
-    "password": "newSecurePassword123"
+    "email": "john@example.com",
+    "newPassword": "newSecurePassword123"
   }
   ```
 - **Process**:
