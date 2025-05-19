@@ -10,6 +10,9 @@ yarn.lock
 .env
 .env.local
 .env.*.local
+.env.firebase
+.env.production
+.env.development
 
 # Build output
 dist/
@@ -38,5 +41,9 @@ logs/
 *.pid
 *.seed
 *.pid.lock
+# Firebase
 maia-mirror-firebase-adminsdk-fbsvc-63615d3185.json
 .env.firebase
+FirebaseCredits.json
+*-firebase-adminsdk-*.json
+firebase-credentials.json
