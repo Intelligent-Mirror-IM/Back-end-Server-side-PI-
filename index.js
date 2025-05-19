@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
 import mobileRoutes from "./routes/mobileRoute.js";
-import passport from "passport";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
@@ -57,7 +56,6 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(passport.initialize());
 
 app.use("/api/maia", chatbotRoutes);
 app.use("/api/mobile", mobileRoutes);
