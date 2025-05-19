@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import serviceAccount from "../maia-mirror-firebase-adminsdk-fbsvc-63615d3185.json" assert { type: "json" };
+import serviceAccount from "../FirebaseCredits.json" assert { type: "json" };
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
