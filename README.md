@@ -53,6 +53,7 @@ backend-nodejs
 ## Configuration
 
 1. Create a `.env` file in the root directory and add your MongoDB connection string and authentication secrets:
+
    ```
    MONGO_URI=<your-mongodb-connection-string>
    PORT=<your-port-number>
@@ -68,6 +69,7 @@ backend-nodejs
 2. For Firebase Authentication, you can either:
 
    a. Add Firebase configuration manually to your `.env` file:
+
    ```
    FIREBASE_TYPE=service_account
    FIREBASE_PROJECT_ID=your_project_id
@@ -78,10 +80,11 @@ backend-nodejs
    ```
 
    b. Or use our setup script (recommended):
+
    ```
    npm run setup-firebase
    ```
-   
+
    You'll need your Firebase service account JSON file ready. The script will guide you through the process.
 
 3. For detailed Firebase setup instructions, see [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)

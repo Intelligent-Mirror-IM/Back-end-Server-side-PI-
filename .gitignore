@@ -47,3 +47,6 @@ maia-mirror-firebase-adminsdk-fbsvc-63615d3185.json
 FirebaseCredits.json
 *-firebase-adminsdk-*.json
 firebase-credentials.json
+
+# Secure credentials
+secure-credentials/

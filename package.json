@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "setup-firebase": "node scripts/setup-firebase-wrapper.cjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
