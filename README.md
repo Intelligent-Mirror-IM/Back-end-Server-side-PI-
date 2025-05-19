@@ -22,6 +22,7 @@ backend-nodejs
 │   └── mobileRoute.js
 ├── utils
 │   ├── currentActiveUser.js
+│   ├── firebaseAuth.js
 │   ├── helpers.js
 │   ├── mailHandler.js
 │   └── OTPhandler.js
@@ -30,6 +31,7 @@ backend-nodejs
 ├── package.json
 ├── MOBILE_API_DOCUMENTATION.md
 ├── CHATBOT_API_DOCUMENTATION.md
+├── FIREBASE_SETUP.md
 └── README.md
 ```
 
@@ -62,6 +64,27 @@ backend-nodejs
    MAIL_USER=<your-email-address>
    MAIL_PASS=<your-email-password-or-app-password>
    ```
+
+2. For Firebase Authentication, you can either:
+
+   a. Add Firebase configuration manually to your `.env` file:
+   ```
+   FIREBASE_TYPE=service_account
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_PRIVATE_KEY_ID=your_private_key_id
+   FIREBASE_PRIVATE_KEY="your_private_key_with_newlines"
+   FIREBASE_CLIENT_EMAIL=your_client_email
+   ...
+   ```
+
+   b. Or use our setup script (recommended):
+   ```
+   npm run setup-firebase
+   ```
+   
+   You'll need your Firebase service account JSON file ready. The script will guide you through the process.
+
+3. For detailed Firebase setup instructions, see [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
 
 ## Usage
 
@@ -143,6 +166,7 @@ The Socket.io implementation includes robust error handling:
 ## Features
 
 - **Secure Authentication**: User passwords are securely hashed using bcryptjs.
+- **Firebase Authentication**: Support for Firebase Authentication with Google, Email, and other providers.
 - **Google OAuth Integration**: Support for authentication with Google accounts.
 - **Google Calendar API**: Integration with Google Calendar for managing events.
 - **User Session Tracking**: Global user tracking across the application using singleton pattern.
