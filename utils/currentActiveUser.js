@@ -1,15 +1,27 @@
-export const currentActiveUser = {
-  currentUser: "",
-  getCurrentUser: () => {
-    return currentActiveUser.currentUser;
+export const activeUsers = {
+  users: new Map(),
+
+  getCurrentUser: (userId) => {
+    return activeUsers.users.get(userId);
   },
-  setCurrentUser: (user) => {
-    currentActiveUser.currentUser = user;
+
+  setCurrentUser: (userId, user) => {
+    activeUsers.users.set(userId, user);
+  },
+
+  removeUser: (userId) => {
+    activeUsers.users.delete(userId);
+  },
+
+  isUserActive: (userId) => {
+    return activeUsers.users.has(userId);
+  },
+
+  getAllActiveUsers: () => {
+    return Array.from(activeUsers.users.values());
   },
 };
-export const clearCurrentUser = () => {
-  currentActiveUser.currentUser = "";
-};
-export const isUserActive = () => {
-  return currentActiveUser.currentUser !== "";
+
+export const clearAllUsers = () => {
+  activeUsers.users.clear();
 };

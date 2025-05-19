@@ -6,20 +6,18 @@ import { OAuth2Client } from "google-auth-library";
 import GoogleStrategy from "passport-google-oauth20";
 import passport from "passport";
 import dotenv from "dotenv";
-import { currentActiveUser } from "../utils/currentActiveUser.js";
+import { activeUsers } from "../utils/currentActiveUser.js";
 import { connectedSockets as sockets } from "../index.js";
 dotenv.config();
 
 const pendingRequests = new Map();
 
 const retriveAiLogs = async (req, res) => {
-  if (!currentActiveUser.getCurrentUser()) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  if (req.user.id != currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "Not The Same User" });
-  }
-  const userId = currentActiveUser.getCurrentUser();
+  
+  const userId = req.user.id;
   const user = await User.findById(userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
@@ -41,12 +39,10 @@ const askMaia = async (req, res) => {
   if (!prompt) {
     return res.status(400).json({ message: "Prompt is required" });
   }
-  if (!currentActiveUser.getCurrentUser()) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  if (req.user.id != currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "Not The Same User" });
-  }
+  
   try {
     const userId = req.user.id;
     const requestId = `req_${Date.now()}_${Math.random()
@@ -132,13 +128,11 @@ const handleAiResponse = async (socket, data) => {
 };
 
 const deleteLogs = async (req, res) => {
-  if (!currentActiveUser.getCurrentUser()) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  if (req.user.id != currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "Not The Same User" });
-  }
-  const userId = currentActiveUser.getCurrentUser();
+  
+  const userId = req.user.id;
   try {
     await AiLog.deleteMany({ userId });
     return res.status(200).json({ message: "Logs deleted successfully" });

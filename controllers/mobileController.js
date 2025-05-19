@@ -3,7 +3,7 @@ import User from "../models/userSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { currentActiveUser } from "../utils/currentActiveUser.js";
+import { activeUsers } from "../utils/currentActiveUser.js";
 import { sendMail } from "../utils/mailHandler.js";
 import OTP from "../utils/OTPhandler.js";
 import { getGoogleProfileFromToken } from "../utils/firebaseAuth.js";
@@ -56,7 +56,7 @@ const signup = async (req, res) => {
       token: token,
     };
 
-    currentActiveUser.setCurrentUser("" + newUser._id);
+    activeUsers.setCurrentUser("" + newUser._id, newUser);
     return res.status(201).json(userResponse);
   } catch (error) {
     return res
@@ -96,7 +96,7 @@ const login = async (req, res) => {
       createdAt: user.createdAt,
       token: user.token,
     };
-    currentActiveUser.setCurrentUser("" + user._id);
+    activeUsers.setCurrentUser("" + user._id, user);
     return res.status(200).json(userResponse);
   } catch (error) {
     return res
@@ -106,12 +106,11 @@ const login = async (req, res) => {
 };
 const logout = async (req, res) => {
   if (
-    !currentActiveUser.getCurrentUser() ||
-    req.user.id !== currentActiveUser.getCurrentUser()
+    !activeUsers.isUserActive(req.user.id)
   ) {
     return res.status(401).json({ message: "No active User." });
   }
-  const userId = currentActiveUser.getCurrentUser();
+  const userId = req.user.id;
   const user = await User.findById(userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
@@ -119,7 +118,7 @@ const logout = async (req, res) => {
   try {
     user.token = null;
     await user.save();
-    currentActiveUser.setCurrentUser(null);
+    activeUsers.removeUser(userId);
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error: ", error);
@@ -171,7 +170,7 @@ const checkOTP = async (req, res) => {
     });
     user.token = token;
     await user.save();
-    currentActiveUser.setCurrentUser("" + user._id);
+    activeUsers.setCurrentUser("" + user._id, user);
     return res.status(200).json({
       message: "OTP verified successfully",
       token,
@@ -258,7 +257,7 @@ const googleOauth = async (req, res) => {
       createdAt: user.createdAt,
       token: token,
     };
-    currentActiveUser.setCurrentUser("" + user._id);
+    activeUsers.setCurrentUser("" + user._id, user);
     console.log("User logged in successfully using Google OAuth");
     return res.status(200).json(userResponse);
   } catch (error) {
@@ -270,17 +269,15 @@ const googleOauth = async (req, res) => {
 };
 
 const editProfile = async (req, res) => {
-  if (!currentActiveUser.getCurrentUser()) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  if (req.user.id != currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "Not The Same User" });
-  }
+  
   const { username, email } = req.body;
   if (!username && !email) {
     return res.status(400).json({ message: "No fields to update" });
   }
-  const userId = currentActiveUser.getCurrentUser();
+  const userId = req.user.id;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -305,12 +302,10 @@ const editProfile = async (req, res) => {
   }
 };
 const deleteAccount = async (req, res) => {
-  if (!currentActiveUser.getCurrentUser()) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  if (req.user.id != currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "Not The same User" });
-  }
+  
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -320,7 +315,7 @@ const deleteAccount = async (req, res) => {
 
     await User.deleteOne({ _id: req.user.id });
 
-    currentActiveUser.setCurrentUser(null);
+    activeUsers.removeUser(req.user.id);
     return res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.error("Error in delete account: ", error);

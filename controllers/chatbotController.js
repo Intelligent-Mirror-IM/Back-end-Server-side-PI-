@@ -1,16 +1,17 @@
 import { connectedSockets } from "../index.js";
 import AiLog from "../models/aiLogSchema.js";
 import User from "../models/userSchema.js";
-import { currentActiveUser } from "../utils/currentActiveUser.js";
+import { activeUsers } from "../utils/currentActiveUser.js";
 
 const aiLogResponse = async (req, res) => {
   const { prompt, response, status, errorMessage } = req.body;
+  const { userId } = req.body; // Get userId from the request body
 
-  if (!currentActiveUser.getCurrentUser()) {
-    return res.status(401).json({ message: "No active User." });
-  }
-  const userId = currentActiveUser.getCurrentUser();
   if (!userId) {
+    return res.status(401).json({ message: "User ID is required." });
+  }
+  
+  if (!activeUsers.isUserActive(userId)) {
     return res.status(401).json({ message: "No active User." });
   }
 
@@ -49,6 +50,7 @@ const aiLogResponse = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
 const checkActiveSession = async (req, res) => {
   if (!connectedSockets.size) {
     return res.status(401).json({ message: "No active session." });

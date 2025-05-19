@@ -16,7 +16,7 @@ http://localhost:5200/api/maia
 
 ## Authentication
 
-Some endpoints require an active user session tracked by the `currentActiveUser` global variable. This is different from the JWT authentication used in the Mobile API.
+Some endpoints require an active user session tracked by the `activeUsers` module. This is different from the JWT authentication used in the Mobile API.
 
 ## Endpoints
 
@@ -92,7 +92,7 @@ All endpoints follow a consistent error response format:
 
 ## Integration with User Sessions
 
-The Chatbot API relies on the `currentActiveUser` global variable to track the currently active user. This variable is set when:
+The Chatbot API relies on the `activeUsers` module to track multiple active users. This variable is set when:
 
 1. A user logs in through the Mobile API
 2. A user is authenticated through Google OAuth
