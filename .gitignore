@@ -39,3 +39,4 @@ logs/
 *.seed
 *.pid.lock
 maia-mirror-firebase-adminsdk-fbsvc-63615d3185.json
+.env.firebase
