@@ -97,6 +97,7 @@ const login = async (req, res) => {
       token: user.token,
     };
     activeUsers.setCurrentUser("" + user._id, user);
+    console.log(userResponse);
     return res.status(200).json(userResponse);
   } catch (error) {
     return res
@@ -105,9 +106,7 @@ const login = async (req, res) => {
   }
 };
 const logout = async (req, res) => {
-  if (
-    !activeUsers.isUserActive(req.user.id)
-  ) {
+  if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
   const userId = req.user.id;
@@ -272,7 +271,7 @@ const editProfile = async (req, res) => {
   if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  
+
   const { username, email } = req.body;
   if (!username && !email) {
     return res.status(400).json({ message: "No fields to update" });
@@ -305,7 +304,7 @@ const deleteAccount = async (req, res) => {
   if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  
+
   try {
     const user = await User.findById(req.user.id);
     if (!user) {

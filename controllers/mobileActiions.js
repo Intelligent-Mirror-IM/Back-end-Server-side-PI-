@@ -16,7 +16,7 @@ const retriveAiLogs = async (req, res) => {
   if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  
+
   const userId = req.user.id;
   const user = await User.findById(userId);
   if (!user) {
@@ -42,7 +42,7 @@ const askMaia = async (req, res) => {
   if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  
+
   try {
     const userId = req.user.id;
     const requestId = `req_${Date.now()}_${Math.random()
@@ -131,7 +131,7 @@ const deleteLogs = async (req, res) => {
   if (!activeUsers.isUserActive(req.user.id)) {
     return res.status(401).json({ message: "No active User." });
   }
-  
+
   const userId = req.user.id;
   try {
     await AiLog.deleteMany({ userId });

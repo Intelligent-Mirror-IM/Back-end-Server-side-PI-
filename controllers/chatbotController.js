@@ -10,7 +10,7 @@ const aiLogResponse = async (req, res) => {
   if (!userId) {
     return res.status(401).json({ message: "User ID is required." });
   }
-  
+
   if (!activeUsers.isUserActive(userId)) {
     return res.status(401).json({ message: "No active User." });
   }
